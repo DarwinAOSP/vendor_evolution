@@ -9,7 +9,13 @@ PRODUCT_SOURCE_ROOT_DIRS += -prebuilts/misc/protobuf_vendorcompat
 # Allow vendor prebuilt repos to exclude themselves from bp scanning
 -include $(sort $(wildcard vendor/*/*/exclude-bp.mk))
 
-PRODUCT_BRAND ?= Evolution X
+# Pixel additions
+ifeq ($(WITH_GMS),true)
+$(call inherit-product, vendor/google/overlays/ThemeIcons/config.mk)
+$(call inherit-product, vendor/pixel-style/config/common.mk)
+endif
+
+PRODUCT_BRAND ?= EvolutionX
 
 ifeq ($(PRODUCT_GMS_CLIENTID_BASE),)
 PRODUCT_PRODUCT_PROPERTIES += \
@@ -163,7 +169,6 @@ PRODUCT_COPY_FILES += \
 
 # Config
 PRODUCT_PACKAGES += \
-    SimpleDeviceConfig \
     SimpleSettingsConfig
 
 # Extra tools in Lineage
@@ -223,9 +228,11 @@ PRODUCT_PACKAGES_DEBUG += \
 PRODUCT_PACKAGES += \
     rsync
 
+ifeq ($(WITH_GMS),false)
 # Storage manager
 PRODUCT_PRODUCT_PROPERTIES += \
     ro.storage_manager.enabled=true
+endif
 
 # These packages are excluded from user builds
 PRODUCT_PACKAGES_DEBUG += \
@@ -266,9 +273,11 @@ endif
 $(call inherit-product, vendor/lineage/audio/audio.mk)
 
 # SetupWizard
+ifeq ($(WITH_GMS),false)
 PRODUCT_PRODUCT_PROPERTIES += \
     setupwizard.theme=glif_v4 \
     setupwizard.feature.day_night_mode_enabled=true
+endif
 
 PRODUCT_ENFORCE_RRO_EXCLUDED_OVERLAYS += vendor/lineage/overlay/no-rro
 PRODUCT_PACKAGE_OVERLAYS += \
