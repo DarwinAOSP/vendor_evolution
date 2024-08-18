@@ -1,3 +1,8 @@
+ifeq ($(WITH_GMS),false)
+PRODUCT_PACKAGES += \
+    UpdaterVanillaOverlay
+endif
+
 # Private keys
 ifeq ($(EVO_BUILD_TYPE),Official)
 include vendor/evolution-priv/keys/keys.mk
